@@ -1,3 +1,32 @@
 - name: play database
   hosts: db
-  tasks: []
+  become: yes
+  tasks:
+    # sudo apt-get install gnupg
+  - name: gnupg is installed
+    package:
+      name: gnupg
+      state: present
+    # wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
+  - name: mongodb-key is added
+    apt_key:
+      url: https://www.mongodb.org/static/pgp/server-4.2.asc
+    # echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/4.2 main" | sudo tee /etc/apt/sources.list.d/mongodb.list
+  - name: mongo-db repo is enabled
+    apt_repository:
+      repo: deb http://repo.mongodb.org/apt/debian buster/mongodb-org/4.2 main
+      state: present
+      filename: mongodb
+
+    # sudo apt install mongodb-org
+  - name: mongodb is installed
+    package:
+      name: mongodb-org
+      state: present
+    # sudo systemctl enable mongod
+    # sudo systemctl start mongod 
+  - name: mongodb is started
+    service:
+      name: mongod
+      state: started
+      enabled: yes
