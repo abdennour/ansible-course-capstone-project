@@ -1,6 +1,8 @@
 - name: play database
   hosts: db
   become: yes
+  tags:
+  - db-install
   tasks:
     # sudo apt-get install gnupg
   - name: gnupg is installed
@@ -30,3 +32,65 @@
       name: mongod
       state: started
       enabled: yes
+- name: play database  - configure admin
+  hosts: db
+  become: yes
+  tags:
+  - db-config-admin
+  tasks:
+    #2) drop admin user if exist
+    # mongo admin --eval 'db.dropUser("superadmin")'
+    #3) create admin user
+    # mongo admin --eval 'db.createUser( { user: "superadmin", pwd: "MyPass1234", roles: [ { role: "clusterAdmin", db: "admin" }, { role: "userAdminAnyDatabase", db: "admin" } ] } )'
+  - name: admin user
+    command: "{{ item }}"
+    loop:
+    - mongo admin --eval 'db.dropUser("{{ db_admin_user }}")'
+    - |
+      mongo admin --eval 'db.createUser( { user: "{{ db_admin_user }}", pwd: "{{ db_admin_pass }}", roles: [ { role: "clusterAdmin", db: "admin" }, { role: "userAdminAnyDatabase", db: "admin" } ] } )'
+  - name: security is enabled
+    blockinfile:
+      path: /etc/mongod.conf
+      block: |
+        security:
+          authorization: "enabled"
+      state: present
+    notify: mongodb is restarted
+  handlers:
+  - name: mongodb is restarted
+    service:
+      name: mongod
+      state: restarted
+  #4) enable security (/etc/mongod.conf) --> Restart Mongodb
+  #> security:
+  #>   authorization: "enabled"
+
+- name: play - rest of configuration
+  hosts: db
+  become: yes
+  tags:
+  - db-config
+  tasks:
+  - name: pip3 installed
+    package:
+      name: python3-pip
+      state: latest
+  - name: pip pymongo installed
+    pip:
+      name: pymongo
+      state: latest
+  - name: todo db user exsits
+    mongodb_user:
+      login_user: "{{ db_admin_user }}"
+      login_password: "{{ db_admin_pass }}"
+      database: admin
+      user: "{{ db_todo_user }}"
+      password: "{{ db_todo_pass }}"
+      state: present
+      roles:
+        - db: "{{ db_name_todo }}"
+          role: readWrite
+
+
+
+

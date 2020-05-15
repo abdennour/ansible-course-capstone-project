@@ -39,3 +39,14 @@ mongo admin --eval 'db.createUser( { user: "superadmin", pwd: "MyPass1234", role
 #> security:
 #>   authorization: "enabled"
 ```
+**App user config**
+
+```sh
+mongo admin --eval 'db.createUser( { user: "todo", pwd: "todo", roles: [ { role: "readWrite", db: "test" } ] } )'
+```
+**Network config**
+
+- Replace the value of bindIp in /etc/mongod.conf
+```sh
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
+```
