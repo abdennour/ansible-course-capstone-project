@@ -50,3 +50,41 @@ mongo admin --eval 'db.createUser( { user: "todo", pwd: "todo", roles: [ { role:
 ```sh
 sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
 ```
+
+
+# Backend
+
+## Prebuild:
+
+- Install go
+
+## Build
+- Checkout source code
+- Run `go build`
+
+## Run Manually
+
+**Check connectivity with DB**
+
+```sh
+nc -zv
+```
+**From source code**
+
+```sh
+export DB_CONNECTION=mongodb://user:pass@localhost:27017 \
+       DB_NAME=test
+go run main.go
+```
+
+**Or From build artifact**
+
+```sh
+export DB_CONNECTION=mongodb://user:pass@localhost:27017 \
+       DB_NAME=test
+/artifact-build-file
+```
+
+## Deploy
+
+- systemd service
