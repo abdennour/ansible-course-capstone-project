@@ -18,21 +18,25 @@
 - name: play backend
   hosts: app
   become: yes
+  vars:
+    be_build_workspace: /opt/build_dir
+    be_repo_url: https://github.com/kubernetes-tn/go-to-do-app.git
+    be_repo_name: go-to-do-app
   tags:
   - be-build
   tasks:
   - name: workspace build exists
     file:
-      path: /opt/build_dir
+      path: "{{ be_build_workspace }}"
       state: directory
   - name: git checkout
     git:
-      repo: https://github.com/kubernetes-tn/go-to-do-app.git
-      dest: /opt/build_dir/go-to-do-app
+      repo: "{{ be_repo_url }}"
+      dest: "{{ be_build_workspace }}/{{ be_repo_name }}"
   - name: go build
     shell: . /etc/profile;go build -o /tmp/todo
     args:
-      chdir: /opt/build_dir/go-to-do-app/server
+      chdir: "{{ be_build_workspace }}/{{ be_repo_name }}/server"
 
 - name: play backend
   hosts: app
