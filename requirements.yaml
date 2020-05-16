@@ -1,1 +1,3 @@
-[]
+- src: abdennour.golang
+  name: abdennour.golang
+  version: v1.0.8

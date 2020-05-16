@@ -1,0 +1,12 @@
+ansibleuser*
+*.py
+_.yaml
+*assign*
+*.pem
+*.tmp
+
+roles/*
+!roles/.gitkeep
+
+collections/*
+!collections/.gitkeep

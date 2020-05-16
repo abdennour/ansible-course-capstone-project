@@ -1,4 +1,4 @@
-- name: play database
+- name: play database install
   hosts: db
   become: yes
   tags:
@@ -64,7 +64,6 @@
   #4) enable security (/etc/mongod.conf) --> Restart Mongodb
   #> security:
   #>   authorization: "enabled"
-
 - name: play - rest of configuration
   hosts: db
   become: yes
@@ -102,5 +101,3 @@
     service:
       name: mongod
       state: restarted
-
-

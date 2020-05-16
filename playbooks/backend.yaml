@@ -1,3 +1,27 @@
 - name: play backend
   hosts: app
+  tags:
+  - be-pre-build
+  tasks:
+  - name: go is installed
+    import_role:
+      name: abdennour.golang
+    vars:
+      golang_version: "1.14"
+      golang_packages:
+      - github.com/gorilla/mux
+      - go.mongodb.org/mongo-driver/mongo
+      golang_users:
+      - "{{ ansible_ssh_user }}"
+    become: yes
+  
+- name: play backend
+  hosts: app
+  tags:
+  - be-build
+  tasks: []
+- name: play backend
+  hosts: app
+  tags:
+  - be-deploy
   tasks: []
