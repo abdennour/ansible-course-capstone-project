@@ -67,7 +67,7 @@ sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
 **Check connectivity with DB**
 
 ```sh
-nc -zv
+nc -zv <db-hostname> 27017
 ```
 **From source code**
 
@@ -84,6 +84,16 @@ export DB_CONNECTION=mongodb://user:pass@localhost:27017 \
        DB_NAME=test
 /artifact-build-file
 ```
+
+## Run Production grade
+
+1 - Create Systemd Service Todo which populates (2) & manages (3)
+      -> notify: `systemctl reload-daemon`
+
+2 - Put env vars in seperated file ( `/etc/todo.env`)
+
+3 - Move build file from `/tmp/todo` to a standard place (`/usr/local/bin/todo`)
+      -> notify: `systemctl restart todo`
 
 ## Deploy
 

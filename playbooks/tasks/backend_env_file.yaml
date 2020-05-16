@@ -1,0 +1,16 @@
+- name: env file exists
+  file:
+    path: "{{ be_env_file }}"
+    state: file
+# Populate  DB_NAME
+- name: DB_NAME env var is up-to-date
+  lineinfile:
+    path: "{{ be_env_file }}"
+    line: DB_NAME={{ hostvars['db']['db_name_todo'] }}
+    regexp: '^DB_NAME='
+# Populate DB_CONNECTION
+- name: DB_CONNECTION env var is up-to-date
+  lineinfile:
+    path: "{{ be_env_file }}"
+    line: DB_CONNECTION=mongodb://{{ hostvars['db']['db_todo_user'] }}:{{ hostvars['db']['db_todo_pass'] }}@{{ hostvars['db']['ansible_facts']['default_ipv4']['address'] }}:27017
+    regexp: '^DB_CONNECTION='

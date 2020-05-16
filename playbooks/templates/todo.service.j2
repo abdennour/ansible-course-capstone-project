@@ -1,0 +1,11 @@
+[Unit]
+Description=todo
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5s
+ExecStart={{ be_prod_bin }}
+EnvironmentFile={{ be_env_file }}
+[Install]
+WantedBy=multi-user.target
