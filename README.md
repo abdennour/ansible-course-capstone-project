@@ -98,3 +98,31 @@ export DB_CONNECTION=mongodb://user:pass@localhost:27017 \
 ## Deploy
 
 - systemd service
+
+
+
+# Frontend
+
+## Prebuild:
+
+- Install nodejs
+
+## Build
+- Checkout source code
+- Run `npm install`
+
+## Run Manually
+
+```sh
+# Set REACT_APP_API_ENDPOINT, then
+npm start
+```
+
+## Run Production grade
+
+```sh
+npm install pm2 -g
+# Set REACT_APP_API_ENDPOINT, then
+# Start App with pm2
+pm2 start node_modules/react-scripts/scripts/start.js --name todo
+```
